@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Travel.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Travel.Controllers
 {
@@ -17,18 +18,33 @@ namespace Travel.Controllers
       _db = db;
     }
 
-    // GET api/reviews
+    // GET api/reviews?search=
     [HttpGet]
     public ActionResult<IEnumerable<Review>> Get(string search)
     {
       var query = _db.Reviews.AsQueryable();
 
-      if (search != null)
+      if (Int32.TryParse(search, out int number))
+      {
+        if (search != null)
+        {
+          query = query.Where(entry => entry.Rating == number);
+        }
+      }
+      else if (search != null)
       {
         query = query.Where(entry => entry.Country.ToUpper() == search.ToUpper() || entry.City.ToUpper() == search.ToUpper());
       }
+      // else
+      // {
+      //   var destinationGroup = query.GroupBy(x => x.Destination);
+      //   var maxCount = destinationGroup.Max(g => g.Count());
+      //   var mostPopular = destinationGroup.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList();
+      //   query = query.Where(entry => entry.Destination == mostPopular[0]);
+      //   return query.OrderByDescending(x => x.Rating).ToList();
+      // }
 
-      return query.OrderBy(x => x.Rating).ToList();
+      return query.OrderByDescending(x => x.Rating).ToList();
     }
 
     // POST api/reviews
@@ -39,20 +55,20 @@ namespace Travel.Controllers
       _db.SaveChanges();
     }
 
-    // GET api/reviews/5
+    // GET api/reviews/{id}
     [HttpGet("{id}")]
     public ActionResult<Review> Get(int id)
     {
       return _db.Reviews.FirstOrDefault(entry => entry.ReviewId == id);
     }
 
-    // PUT api/reviews/5
+    // PUT api/reviews/{id}
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Review review)
     {
-        review.ReviewId = id;
-        _db.Entry(review).State = EntityState.Modified;
-        _db.SaveChanges();
+      review.ReviewId = id;
+      _db.Entry(review).State = EntityState.Modified;
+      _db.SaveChanges();
     }
 
     [HttpDelete("{id}")]
@@ -63,10 +79,24 @@ namespace Travel.Controllers
       _db.SaveChanges();
     }
 
-    [HttpGet("{rating}")]
-    public ActionResult<Review> Get(int rating)
+    [HttpGet("/popular")]
+    public ActionResult<IEnumerable<Review>> GetMostPopular()
     {
-      return _db.Reviews.FirstOrDefault(entry => entry.Rating == rating);
+      IEnumerable<Review> query = _db.Reviews.AsQueryable();
+      var destinationGroup = query.GroupBy(x => x.Destination);
+      var maxCount = destinationGroup.Max(g => g.Count());
+      var mostPopular = destinationGroup.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList();
+      query = query.Where(entry => entry.Destination == mostPopular[0]);
+      return query.OrderByDescending(x => x.Rating).ToList();
+    }
+
+    [HttpGet("/random")]
+    public ActionResult<Review> GetRandom()
+    {
+      List<Review> allReviews = _db.Reviews.ToList();
+      var rand = new Random();
+      int temp = rand.Next(0, allReviews.Count()-1);
+      return allReviews[temp];
     }
 
   }

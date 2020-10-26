@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\travel\\travel.csproj": {}
+    "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\Travel\\travel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\travel\\travel.csproj": {
+    "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\Travel\\travel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\travel\\travel.csproj",
+        "projectUniqueName": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\Travel\\travel.csproj",
         "projectName": "travel",
-        "projectPath": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\travel\\travel.csproj",
+        "projectPath": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\Travel\\travel.csproj",
         "packagesPath": "C:\\Users\\Danie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\travel\\obj\\",
+        "outputPath": "C:\\Users\\Danie\\OneDrive\\Desktop\\Travel.Solutions\\Travel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

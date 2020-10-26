@@ -5,7 +5,7 @@ namespace Travel.Models
   public class Review
   {
 
-    public string Destinations { get; set; }
+    public string Destination { get; set; }
     public int ReviewId { get; set; }
     [Required]
     public string ReviewDetails { get; set; }
