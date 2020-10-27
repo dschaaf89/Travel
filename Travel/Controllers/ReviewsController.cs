@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Travel.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Travel.Controllers
 {
@@ -35,18 +39,11 @@ namespace Travel.Controllers
       {
         query = query.Where(entry => entry.Country.ToUpper() == search.ToUpper() || entry.City.ToUpper() == search.ToUpper());
       }
-      // else
-      // {
-      //   var destinationGroup = query.GroupBy(x => x.Destination);
-      //   var maxCount = destinationGroup.Max(g => g.Count());
-      //   var mostPopular = destinationGroup.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList();
-      //   query = query.Where(entry => entry.Destination == mostPopular[0]);
-      //   return query.OrderByDescending(x => x.Rating).ToList();
-      // }
 
       return query.OrderByDescending(x => x.Rating).ToList();
     }
 
+    [Authorize]
     // POST api/reviews
     [HttpPost]
     public void Post([FromBody] Review review)
@@ -62,6 +59,7 @@ namespace Travel.Controllers
       return _db.Reviews.FirstOrDefault(entry => entry.ReviewId == id);
     }
 
+    [Authorize]
     // PUT api/reviews/{id}
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Review review)
@@ -71,6 +69,7 @@ namespace Travel.Controllers
       _db.SaveChanges();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
@@ -79,7 +78,7 @@ namespace Travel.Controllers
       _db.SaveChanges();
     }
 
-    [HttpGet("/popular")]
+    [HttpGet("popular")]
     public ActionResult<IEnumerable<Review>> GetMostPopular()
     {
       IEnumerable<Review> query = _db.Reviews.AsQueryable();
@@ -90,7 +89,7 @@ namespace Travel.Controllers
       return query.OrderByDescending(x => x.Rating).ToList();
     }
 
-    [HttpGet("/random")]
+    [HttpGet("random")]
     public ActionResult<Review> GetRandom()
     {
       List<Review> allReviews = _db.Reviews.ToList();
